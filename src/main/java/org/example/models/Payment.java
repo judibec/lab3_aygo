@@ -8,6 +8,9 @@ public class Payment {
     private String paymentType;
     private String moneyType;
 
+    public Payment() {
+    }
+
     public Payment(Long id, String amount, String description, String paymentType, String moneyType) {
         this.id = id;
         this.amount = amount;

@@ -36,4 +36,21 @@ public class RideRepository {
                 .orElse(null);
     }
 
+    public Ride save(Ride ride) {
+        if (ride.getId() == null) {
+            long newId = rides.stream().mapToLong(Ride::getId).max().orElse(0) + 1;
+            ride.setId(newId);
+            rides.add(ride);
+        } else {
+            Ride existingRide = findById(ride.getId());
+            if (existingRide != null) {
+                rides.remove(existingRide);
+                rides.add(ride);
+            } else {
+                rides.add(ride);
+            }
+        }
+        return ride;
+    }
+
 }

@@ -25,5 +25,23 @@ public class DriverService {
         return driverRepository.findById(id);
     }
 
+    public Driver createDriver(Driver driver) {
+        return driverRepository.save(driver);
+    }
+
+    public Driver updateDriver(Long id, Driver updatedDriver) {
+        Driver existingDriver = driverRepository.findById(id);
+        if (existingDriver != null) {
+            existingDriver.setName(updatedDriver.getName());
+            existingDriver.setLastname(updatedDriver.getLastname());
+            existingDriver.setPosition(updatedDriver.getPosition());
+            existingDriver.setNumber(updatedDriver.getNumber());
+            existingDriver.setCarType(updatedDriver.getCarType());
+            existingDriver.setCarColor(updatedDriver.getCarColor());
+            return driverRepository.save(existingDriver);
+        }
+        return null;
+    }
+
 
 }

@@ -13,7 +13,7 @@ public class DriverRepository {
 
     public DriverRepository() {
         drivers.add(new Driver(1L, "Daniel", "Lara", new Position(55.2708, 25.2048), "4848564", "Renault Sandero", "Rojo"));
-        drivers.add(new Driver(2L, "ALvaro", "Murcia", new Position(13.4050, 52.5200), "7898456", "Chevrolet Spark", "Gris"));
+        drivers.add(new Driver(2L, "Alvaro", "Murcia", new Position(13.4050, 52.5200), "7898456", "Chevrolet Spark", "Gris"));
     }
 
     public List<Driver> findAll() {
@@ -25,5 +25,22 @@ public class DriverRepository {
                 .filter(user -> user.getId().equals(id))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public Driver save(Driver driver) {
+        if (driver.getId() == null) {
+            long newId = drivers.stream().mapToLong(Driver::getId).max().orElse(0) + 1;
+            driver.setId(newId);
+            drivers.add(driver);
+        } else {
+            Driver existingDriver = findById(driver.getId());
+            if (existingDriver != null) {
+                drivers.remove(existingDriver);
+                drivers.add(driver);
+            } else {
+                drivers.add(driver);
+            }
+        }
+        return driver;
     }
 }

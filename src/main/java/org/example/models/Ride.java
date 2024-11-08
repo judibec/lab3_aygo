@@ -9,6 +9,9 @@ public class Ride {
     private Payment payment;
     private String state;
 
+    public Ride() {
+    }
+
     public Ride(Long id, Position origin, Position destination, User user, Driver driver, Payment payment, String state) {
         this.id = id;
         this.origin = origin;

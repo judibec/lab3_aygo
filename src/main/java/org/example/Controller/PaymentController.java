@@ -5,9 +5,7 @@ import org.example.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,5 +23,21 @@ public class PaymentController {
     @GetMapping("/{paymentId}")
     public ResponseEntity<Payment> getDriverById(@PathVariable("paymentId")String paymentId){
         return  ResponseEntity.ok(paymentService.getPaymentById(Long.valueOf(paymentId)));
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) {
+        Payment createdPayment = paymentService.createPayment(payment);
+        return ResponseEntity.ok(createdPayment);
+    }
+
+    @PutMapping("/{paymentId}")
+    public ResponseEntity<Payment> updatePayment(@PathVariable("paymentId") Long paymentId, @RequestBody Payment payment) {
+        Payment updatedPayment = paymentService.updatePayment(paymentId, payment);
+        if (updatedPayment != null) {
+            return ResponseEntity.ok(updatedPayment);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

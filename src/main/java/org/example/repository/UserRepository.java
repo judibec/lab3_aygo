@@ -26,4 +26,21 @@ public class UserRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    public User save(User user) {
+        if (user.getId() == null) {
+            long newId = users.stream().mapToLong(User::getId).max().orElse(0) + 1;
+            user.setId(newId);
+            users.add(user);
+        } else {
+            User existingUser = findById(user.getId());
+            if (existingUser != null) {
+                users.remove(existingUser);
+                users.add(user);
+            } else {
+                users.add(user);
+            }
+        }
+        return user;
+    }
 }

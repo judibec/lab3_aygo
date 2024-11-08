@@ -25,4 +25,21 @@ public class PaymentRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    public Payment save(Payment payment) {
+        if (payment.getId() == null) {
+            long newId = payments.stream().mapToLong(Payment::getId).max().orElse(0) + 1;
+            payment.setId(newId);
+            payments.add(payment);
+        } else {
+            Payment existingPayment = findById(payment.getId());
+            if (existingPayment != null) {
+                payments.remove(existingPayment);
+                payments.add(payment);
+            } else {
+                payments.add(payment);
+            }
+        }
+        return payment;
+    }
 }

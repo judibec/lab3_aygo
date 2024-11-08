@@ -9,6 +9,9 @@ public class Driver {
     private String carType;
     private String carColor;
 
+    public Driver() {
+    }
+
     public Driver(Long id, String name, String lastname, Position position, String number, String carType, String carColor) {
         this.id = id;
         this.name = name;

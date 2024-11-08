@@ -24,4 +24,20 @@ public class PaymentService {
     public Payment getPaymentById(Long id) {
         return paymentRepository.findById(id);
     }
+
+    public Payment createPayment(Payment payment) {
+        return paymentRepository.save(payment);
+    }
+
+    public Payment updatePayment(Long id, Payment updatedPayment) {
+        Payment existingPayment = paymentRepository.findById(id);
+        if (existingPayment != null) {
+            existingPayment.setAmount(updatedPayment.getAmount());
+            existingPayment.setDescription(updatedPayment.getDescription());
+            existingPayment.setPaymentType(updatedPayment.getPaymentType());
+            existingPayment.setMoneyType(updatedPayment.getMoneyType());
+            return paymentRepository.save(existingPayment);
+        }
+        return null;
+    }
 }

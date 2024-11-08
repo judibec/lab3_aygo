@@ -9,6 +9,9 @@ public class User {
     private String hasCard;
     private String cardNumber;
 
+    public User() {
+    }
+
     public User(Long id, String name, String lastname, Position position, String number, String hasCard, String cardNumber) {
         this.id = id;
         this.name = name;
