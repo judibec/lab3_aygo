@@ -1,10 +1,13 @@
 package org.example.services;
 
 import org.example.models.Driver;
+import org.example.models.Position;
 import org.example.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,5 +46,22 @@ public class DriverService {
         return null;
     }
 
+    @Scheduled(fixedRate = 3000)
+    public void updateDriverPositions() {
+        List<Driver> drivers = new ArrayList<>(driverRepository.findAll());
+
+        for (Driver driver : drivers) {
+            Position newPosition = simulateMovement(driver.getPosition());
+            driver.setPosition(newPosition);
+            driverRepository.save(driver);
+        }
+    }
+
+    private Position simulateMovement(Position position) {
+        // Simula un pequeño cambio en latitud y longitud
+        double newLatitude = position.getLatitude() + 2;
+        double newLongitude = position.getLongitude() + 3;
+        return new Position(newLongitude, newLatitude);
+    }
 
 }

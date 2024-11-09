@@ -1,6 +1,7 @@
 package org.example.Controller;
 
 import org.example.models.Driver;
+import org.example.models.Position;
 import org.example.services.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("v1/drivers")
@@ -40,4 +42,14 @@ public class DriverController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/positions")
+    public ResponseEntity<List<Position>> getDriverPositions() {
+        List<Position> positions = driverService.getAllDrivers().stream()
+                .map(Driver::getPosition)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(positions);
+    }
+
+
 }
