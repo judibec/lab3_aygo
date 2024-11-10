@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Position Tracker</title>
+    <style>
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        canvas { border: 1px solid #333; }
+    </style>
+</head>
+<body>
+
+<canvas id="mapCanvas" width="800" height="600"></canvas>
+
+<script>
+    const canvas = document.getElementById('mapCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    let driverPosition = { latitude: 0, longitude: 0 };
+    const apiUrl = 'https://q2wnv17uk2.execute-api.us-east-1.amazonaws.com/prueba/drivers/positions';
+
+    const carImage = new Image();
+    carImage.src = 'https://images.vexels.com/content/154573/preview/hatchback-car-top-view-silhouette-85b4ca.png'; // Cambia esta URL por la URL de la imagen de tu carrito
+
+    function scalePosition(lat, lon) {
+        const x = (lon + 180) * (canvas.width / 360);
+        const y = (canvas.height / 2) - (lat * (canvas.height / 180));
+        return { x, y };
+    }
+
+    async function fetchDriverPosition() {
+        try {
+            const response = await fetch(apiUrl);
+			const result = await response.json();
+			const positions = result.data;
+            if (positions.length > 0) {
+                driverPosition = positions[0]; 
+            }
+            drawMap();
+        } catch (error) {
+            console.error("Error al obtener la posición del conductor:", error);
+        }
+    }
+
+    function drawMap() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const pos = scalePosition(driverPosition.latitude, driverPosition.longitude);
+
+        if (carImage.complete) {
+            const carWidth = 45; 
+            const carHeight = 45;
+            
+            ctx.save();
+            
+            ctx.translate(pos.x, pos.y);
+
+            ctx.rotate(Math.PI / -4); // 45 grados en radianes
+
+            ctx.drawImage(carImage, -carWidth / 2, -carHeight / 2, carWidth, carHeight);
+            
+            ctx.restore();
+        }
+    }
+    carImage.onload = () => {
+        drawMap();
+    };
+
+    // Actualizar la posición cada 5 segundos
+    setInterval(fetchDriverPosition, 3000);
+
+</script>
+
+</body>
+</html>
